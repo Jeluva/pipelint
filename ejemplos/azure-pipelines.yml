@@ -1,0 +1,26 @@
+trigger:
+  - main
+variables:
+  buildConfig: Release
+  dbPassword: hunter2
+  apiToken: $(TOKEN_SECRETO)
+stages:
+  - stage: Build
+    jobs:
+      - job: Compilar
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: latest
+          - script: curl https://ejemplo.com/install.sh | sh
+          - task: PublishBuildArtifacts
+  - stage: Deploy
+    jobs:
+      - job: Publicar
+        timeoutInMinutes: 15
+        pool:
+          vmImage: ubuntu-22.04
+        steps:
+          - task: AzureWebApp@1
